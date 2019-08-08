@@ -10,6 +10,7 @@ export class VpcStack extends cdk.Stack {
     const vpc = new ec2.Vpc(this, "VPC", {
         maxAzs: 2
     });
+    Tag.add(vpc, 'Name', 'mtg/default');
     Tag.add(vpc, 'Env', 'Dev');
 
     // Bastion host
