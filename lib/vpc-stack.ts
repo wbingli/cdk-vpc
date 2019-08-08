@@ -1,18 +1,22 @@
-import sns = require('@aws-cdk/aws-sns');
-import subs = require('@aws-cdk/aws-sns-subscriptions');
-import sqs = require('@aws-cdk/aws-sqs');
 import cdk = require('@aws-cdk/core');
+import ec2 = require('@aws-cdk/aws-ec2');
+import autoscaling = require('@aws-cdk/aws-autoscaling');
+import {Tag} from "@aws-cdk/core";
 
 export class VpcStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const queue = new sqs.Queue(this, 'VpcQueue', {
-      visibilityTimeout: cdk.Duration.seconds(300)
+    const vpc = new ec2.Vpc(this, "VPC", {
+        maxAzs: 2
     });
+    Tag.add(vpc, 'Env', 'Dev');
 
-    const topic = new sns.Topic(this, 'VpcTopic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
+    // Bastion host
+    const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
+      vpc,
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
+      machineImage: new ec2.AmazonLinuxImage()
+    });
   }
 }
