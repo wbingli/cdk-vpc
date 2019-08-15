@@ -3,4 +3,5 @@ import cdk = require('@aws-cdk/core');
 import { VpcStack } from '../lib/vpc-stack';
 
 const app = new cdk.App();
-new VpcStack(app, 'VpcStack');
+const env = {account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION}
+new VpcStack(app, 'VpcStack', {env: env});

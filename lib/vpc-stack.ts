@@ -1,7 +1,6 @@
 import cdk = require('@aws-cdk/core');
 import ec2 = require('@aws-cdk/aws-ec2');
 import autoscaling = require('@aws-cdk/aws-autoscaling');
-import {Tag} from "@aws-cdk/core";
 
 export class VpcStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -10,8 +9,8 @@ export class VpcStack extends cdk.Stack {
     const vpc = new ec2.Vpc(this, "VPC", {
         maxAzs: 2
     });
-    Tag.add(vpc, 'Name', 'mtg/default');
-    Tag.add(vpc, 'Env', 'Dev');
+    cdk.Tag.add(vpc, 'Name', 'Dev');
+    cdk.Tag.add(vpc, 'Env', 'Dev');
 
     // Bastion host
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
