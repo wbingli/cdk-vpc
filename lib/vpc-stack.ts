@@ -16,7 +16,8 @@ export class VpcStack extends cdk.Stack {
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
-      machineImage: new ec2.AmazonLinuxImage()
+      machineImage: new ec2.AmazonLinuxImage(),
+      keyName: 'dev'
     });
   }
 }
